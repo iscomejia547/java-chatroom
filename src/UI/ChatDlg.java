@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 public class ChatDlg extends javax.swing.JDialog {
     private int id=-1;
     private boolean isServer;
+    private ServerSocket ss;
+    private Socket s;
     private DataInputStream dis;
     private DataOutputStream dos;
     /**
@@ -40,11 +42,6 @@ public class ChatDlg extends javax.swing.JDialog {
     }
 
     private class ChatServer extends Thread{
-        private ServerSocket ss;
-        private Socket s;
-        private DataInputStream dis;
-        private DataOutputStream dos;
-        
         @Override
         public void run(){
             try {
@@ -55,27 +52,46 @@ public class ChatDlg extends javax.swing.JDialog {
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+            String msgin="";
+            while(!msgin.equals("exit")){
+                try {
+                    msgin=dis.readUTF();
+                    appendMessage(msgin);
+                } catch (IOException ex) {
+                    Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        }   
+    }
+    
+    private class ClientChat extends Thread{
+        @Override
+        public void run(){
+            try {
+                ss=null;
+                s=new Socket(iptxt.getText(), Integer.parseInt(porttxt.getText()));
+                dis=new DataInputStream(s.getInputStream());
+                dos=new DataOutputStream(s.getOutputStream());
+            } catch (IOException ex) {
+                Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String msgin="";
+            while(!msgin.equals("exit")){
+                try {
+                    msgin=dis.readUTF();
+                    appendMessage(msgin);
+                } catch (IOException ex) {
+                    Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+            }
         }
-
-        public ServerSocket getSs() {
-            return ss;
-        }
-
-        public Socket getS() {
-            return s;
-        }
-
-        public DataInputStream getDis() {
-            return dis;
-        }
-
-        public DataOutputStream getDos() {
-            return dos;
-        }
-        
     }
     
     
+    private void appendMessage(String newmsg){
+        msgarea.setText(msgarea.getText()+"\n"+newmsg);
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -94,10 +110,11 @@ public class ChatDlg extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         connectedlbl = new javax.swing.JLabel();
-        iptxt = new javax.swing.JTextField();
         porttxt = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         msgarea = new javax.swing.JTextArea();
+        submitbtn = new javax.swing.JButton();
+        iptxt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -142,13 +159,6 @@ public class ChatDlg extends javax.swing.JDialog {
         jPanel2.add(connectedlbl, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 140;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
-        jPanel2.add(iptxt, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 140;
@@ -162,10 +172,28 @@ public class ChatDlg extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 65;
         jPanel2.add(jScrollPane1, gridBagConstraints);
+
+        submitbtn.setText("Conectar");
+        submitbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitbtnActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        jPanel2.add(submitbtn, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 140;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
+        jPanel2.add(iptxt, gridBagConstraints);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -179,8 +207,30 @@ public class ChatDlg extends javax.swing.JDialog {
         this.setTitle("Chat #"+id);
         msgarea.setText("-");
         msgarea.setEditable(false);
+        if(isServer){
+            setServer();
+        }
     }//GEN-LAST:event_formWindowOpened
 
+    private void setServer(){
+        iptxt.setEnabled(false);
+        porttxt.setEnabled(false);
+        ChatServer chat=new ChatServer();
+        chat.start();
+        porttxt.setText(String.valueOf(s.getPort()));
+        if(s.isConnected()){
+            connectedlbl.setText("CONECTADO");
+            connectedlbl.setForeground(Color.green);
+        }
+    }
+    private void setClient(){
+        ClientChat chat=new ClientChat();
+        chat.start();
+        if(s.isConnected()){
+            connectedlbl.setText("CONECTADO");
+            connectedlbl.setForeground(Color.green);
+        }
+    }
     private void sendbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendbtnActionPerformed
         String msgout="";
         msgout=msgtxt.getText();
@@ -189,8 +239,12 @@ public class ChatDlg extends javax.swing.JDialog {
         } catch (IOException ex) {
             Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
         }
-        msgarea.setText(msgarea.getText()+"\n"+msgout);
+        appendMessage(msgout);
     }//GEN-LAST:event_sendbtnActionPerformed
+
+    private void submitbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbtnActionPerformed
+        setClient();
+    }//GEN-LAST:event_submitbtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -246,5 +300,6 @@ public class ChatDlg extends javax.swing.JDialog {
     private javax.swing.JTextField msgtxt;
     private javax.swing.JTextField porttxt;
     private javax.swing.JButton sendbtn;
+    private javax.swing.JButton submitbtn;
     // End of variables declaration//GEN-END:variables
 }

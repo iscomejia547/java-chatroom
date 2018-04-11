@@ -71,6 +71,11 @@ public class Main extends javax.swing.JFrame {
         newserverbtn.setFocusable(false);
         newserverbtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         newserverbtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        newserverbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newserverbtnActionPerformed(evt);
+            }
+        });
         jToolBar1.add(newserverbtn);
 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
@@ -88,12 +93,19 @@ public class Main extends javax.swing.JFrame {
 
     private void newchatbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newchatbtnActionPerformed
         ChatDlg dlg=new ChatDlg(this, false);
+        dlg.setIsServer(true);
         dlg.setVisible(true);
     }//GEN-LAST:event_newchatbtnActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         
     }//GEN-LAST:event_formWindowOpened
+
+    private void newserverbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newserverbtnActionPerformed
+        ChatDlg dlg=new ChatDlg(this, false);
+        dlg.setIsServer(false);
+        dlg.setVisible(true);
+    }//GEN-LAST:event_newserverbtnActionPerformed
 
     /**
      * @param args the command line arguments
