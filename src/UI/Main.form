@@ -42,7 +42,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="newchatbtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Nuevo Chat"/>
+            <Property name="text" type="java.lang.String" value="Nuevo Servidor"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -51,15 +51,15 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newchatbtnActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="newserverbtn">
+        <Component class="javax.swing.JButton" name="newclientbtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Nuevo servidor"/>
+            <Property name="text" type="java.lang.String" value="Nuevo chat"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newserverbtnActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newclientbtnActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

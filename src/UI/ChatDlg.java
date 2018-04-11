@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 public class ChatDlg extends javax.swing.JDialog {
     private int id=-1;
     private boolean isServer;
-    private ServerSocket ss;
     private Socket s;
     private DataInputStream dis;
     private DataOutputStream dos;
@@ -37,6 +36,12 @@ public class ChatDlg extends javax.swing.JDialog {
         this.id = id;
     }
 
+    public void setS(Socket s) {
+        this.s = s;
+    }
+
+    
+    
     public void setIsServer(boolean isServer) {
         this.isServer = isServer;
     }
@@ -44,14 +49,16 @@ public class ChatDlg extends javax.swing.JDialog {
     private class ChatServer extends Thread{
         @Override
         public void run(){
+            if(s==null){
+                return;
+            }
             try {
-                ss=new ServerSocket(1206);
-                s=ss.accept();
                 dis=new DataInputStream(s.getInputStream());
                 dos=new DataOutputStream(s.getOutputStream());
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+            porttxt.setText(String.valueOf(s.getPort()));
             String msgin="";
             while(!msgin.equals("exit")){
                 try {
@@ -60,7 +67,7 @@ public class ChatDlg extends javax.swing.JDialog {
                 } catch (IOException ex) {
                     Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+            
             }
         }   
     }
@@ -69,7 +76,6 @@ public class ChatDlg extends javax.swing.JDialog {
         @Override
         public void run(){
             try {
-                ss=null;
                 s=new Socket(iptxt.getText(), Integer.parseInt(porttxt.getText()));
                 dis=new DataInputStream(s.getInputStream());
                 dos=new DataOutputStream(s.getOutputStream());
@@ -90,7 +96,7 @@ public class ChatDlg extends javax.swing.JDialog {
     
     
     private void appendMessage(String newmsg){
-        msgarea.setText(msgarea.getText()+"\n"+newmsg);
+        msgarea.setText("-"+msgarea.getText().trim()+"\n"+newmsg);
     }
     
     /**
@@ -217,8 +223,7 @@ public class ChatDlg extends javax.swing.JDialog {
         porttxt.setEnabled(false);
         ChatServer chat=new ChatServer();
         chat.start();
-        porttxt.setText(String.valueOf(s.getPort()));
-        if(s.isConnected()){
+        if(chat.isAlive()){
             connectedlbl.setText("CONECTADO");
             connectedlbl.setForeground(Color.green);
         }
@@ -226,7 +231,7 @@ public class ChatDlg extends javax.swing.JDialog {
     private void setClient(){
         ClientChat chat=new ClientChat();
         chat.start();
-        if(s.isConnected()){
+        if(chat.isAlive()){
             connectedlbl.setText("CONECTADO");
             connectedlbl.setForeground(Color.green);
         }
