@@ -76,7 +76,9 @@ public class Main extends javax.swing.JFrame {
 
         jToolBar1 = new javax.swing.JToolBar();
         newchatbtn = new javax.swing.JButton();
-        mainpane = new javax.swing.JDesktopPane();
+        newserverbtn = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(6);
@@ -99,22 +101,22 @@ public class Main extends javax.swing.JFrame {
         });
         jToolBar1.add(newchatbtn);
 
+        newserverbtn.setText("Nuevo servidor");
+        newserverbtn.setFocusable(false);
+        newserverbtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        newserverbtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(newserverbtn);
+
         getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
-        javax.swing.GroupLayout mainpaneLayout = new javax.swing.GroupLayout(mainpane);
-        mainpane.setLayout(mainpaneLayout);
-        mainpaneLayout.setHorizontalGroup(
-            mainpaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        mainpaneLayout.setVerticalGroup(
-            mainpaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
-        );
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
-        getContentPane().add(mainpane, java.awt.BorderLayout.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/bg.jpg"))); // NOI18N
+        jPanel1.add(jLabel1, java.awt.BorderLayout.CENTER);
 
-        setSize(new java.awt.Dimension(416, 339));
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        setSize(new java.awt.Dimension(766, 493));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -172,8 +174,10 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JDesktopPane mainpane;
     private javax.swing.JButton newchatbtn;
+    private javax.swing.JButton newserverbtn;
     // End of variables declaration//GEN-END:variables
 }
