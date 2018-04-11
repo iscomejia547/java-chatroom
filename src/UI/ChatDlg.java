@@ -20,6 +20,7 @@ import java.util.logging.Logger;
  */
 public class ChatDlg extends javax.swing.JDialog {
     private int id=-1;
+    private boolean isServer;
     private DataInputStream dis;
     private DataOutputStream dos;
     /**
@@ -34,12 +35,44 @@ public class ChatDlg extends javax.swing.JDialog {
         this.id = id;
     }
 
-    public void setDis(DataInputStream dis) {
-        this.dis = dis;
+    public void setIsServer(boolean isServer) {
+        this.isServer = isServer;
     }
 
-    public void setDos(DataOutputStream dos) {
-        this.dos = dos;
+    private class ChatServer extends Thread{
+        private ServerSocket ss;
+        private Socket s;
+        private DataInputStream dis;
+        private DataOutputStream dos;
+        
+        @Override
+        public void run(){
+            try {
+                ss=new ServerSocket(1206);
+                s=ss.accept();
+                dis=new DataInputStream(s.getInputStream());
+                dos=new DataOutputStream(s.getOutputStream());
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        public ServerSocket getSs() {
+            return ss;
+        }
+
+        public Socket getS() {
+            return s;
+        }
+
+        public DataInputStream getDis() {
+            return dis;
+        }
+
+        public DataOutputStream getDos() {
+            return dos;
+        }
+        
     }
     
     
