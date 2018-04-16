@@ -20,6 +20,7 @@ import java.util.logging.Logger;
  */
 public class ChatDlg extends javax.swing.JDialog {
     private int id=-1;
+    private int serverport;
     private boolean isServer;
     private Socket s;
     private DataInputStream dis;
@@ -36,6 +37,11 @@ public class ChatDlg extends javax.swing.JDialog {
         this.id = id;
     }
 
+    public void setServerport(int serverport) {
+        this.serverport = serverport;
+    }
+    
+    
     public void setS(Socket s) {
         this.s = s;
     }
@@ -58,7 +64,7 @@ public class ChatDlg extends javax.swing.JDialog {
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-            porttxt.setText(String.valueOf(s.getPort()));
+            porttxt.setText(String.valueOf(serverport));
             String msgin="";
             while(!msgin.equals("exit")){
                 try {
