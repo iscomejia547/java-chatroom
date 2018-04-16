@@ -69,7 +69,7 @@ public class ChatDlg extends javax.swing.JDialog {
             while(!msgin.equals("exit")){
                 try {
                     msgin=dis.readUTF();
-                    appendMessage(msgin);
+                    appendInMessage(msgin);
                 } catch (IOException ex) {
                     Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -93,7 +93,7 @@ public class ChatDlg extends javax.swing.JDialog {
                 try {
                     msgin=dis.readUTF();
                     System.out.println("Mensaje: "+msgin);
-                    appendMessage(msgin);
+                    appendInMessage(msgin);
                 } catch (IOException ex) {
                     Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
                 } 
@@ -102,10 +102,12 @@ public class ChatDlg extends javax.swing.JDialog {
     }
     
     
-    private void appendMessage(String newmsg){
-        msgarea.setText("-"+msgarea.getText().trim()+"\n"+newmsg);
+    private void appendInMessage(String newmsg){
+        msgarea.setText(msgarea.getText().trim()+"\n-"+newmsg);
     }
-    
+    private void appendOutMessage(String newmsg){
+        msgarea.setText(msgarea.getText().trim()+"\n\t-"+newmsg);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -251,7 +253,7 @@ public class ChatDlg extends javax.swing.JDialog {
         } catch (IOException ex) {
             Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
         }
-        appendMessage(msgout);
+        appendOutMessage(msgout);
     }//GEN-LAST:event_sendbtnActionPerformed
 
     private void submitbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbtnActionPerformed
