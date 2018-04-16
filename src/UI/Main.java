@@ -32,11 +32,13 @@ public class Main extends javax.swing.JFrame {
     private class runServer extends Thread{
         @Override
         public void run(){
-            try {
-                ss=new ServerSocket(1206);
-                s=ss.accept();
+        try {
+                JOptionPane.showMessageDialog(null, "El puerto asignado es: "+ss.getLocalPort());
+                while(s==null){
+                    System.out.println("Esperando...");
+                    s=ss.accept();
+                }
             } catch (IOException ex) {
-                System.out.println("Esta esperando, no puede abrirse");
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             ChatDlg ser_chat=new ChatDlg(new Main(), false);
@@ -46,10 +48,10 @@ public class Main extends javax.swing.JFrame {
             ser_chat.setIsServer(true);
             ser_chat.setId(++chatcount);
             ser_chat.setVisible(true);
-            newchatbtn.setEnabled(false);
+            s=null;
+            //newchatbtn.setEnabled(false);
+            }
         }
-    }
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -118,13 +120,14 @@ public class Main extends javax.swing.JFrame {
     private void newchatbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newchatbtnActionPerformed
         runServer ser=new runServer();
         ser.start();
-        if(ser.getState()==Thread.State.WAITING){
-            System.out.println(":v");
-        }
     }//GEN-LAST:event_newchatbtnActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
+        try {
+            ss=new ServerSocket(1206);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void newclientbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newclientbtnActionPerformed
