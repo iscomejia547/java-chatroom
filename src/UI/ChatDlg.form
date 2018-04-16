@@ -42,6 +42,9 @@
               <Dimension value="[200, 20]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="msgtxtKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="sendbtn">
           <Properties>

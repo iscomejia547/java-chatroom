@@ -6,6 +6,7 @@
 package UI;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.input.KeyCode;
 
 /**
  *
@@ -105,8 +107,16 @@ public class ChatDlg extends javax.swing.JDialog {
     private void appendInMessage(String newmsg){
         msgarea.setText(msgarea.getText().trim()+"\n-"+newmsg);
     }
-    private void appendOutMessage(String newmsg){
-        msgarea.setText(msgarea.getText().trim()+"\n\t-"+newmsg);
+    private void sendOutMessage(){
+        String msgout="";
+        msgout=msgtxt.getText();
+        try {
+            dos.writeUTF(msgout);
+        } catch (IOException ex) {
+            Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        msgarea.setText(msgarea.getText().trim()+"\n\t\t\t-"+msgout);
+        msgtxt.setText("");
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -139,6 +149,11 @@ public class ChatDlg extends javax.swing.JDialog {
         });
 
         msgtxt.setPreferredSize(new java.awt.Dimension(200, 20));
+        msgtxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                msgtxtKeyPressed(evt);
+            }
+        });
         jPanel1.add(msgtxt);
 
         sendbtn.setText("Enviar");
@@ -246,19 +261,18 @@ public class ChatDlg extends javax.swing.JDialog {
         }
     }
     private void sendbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendbtnActionPerformed
-        String msgout="";
-        msgout=msgtxt.getText();
-        try {
-            dos.writeUTF(msgout);
-        } catch (IOException ex) {
-            Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        appendOutMessage(msgout);
+        sendOutMessage();
     }//GEN-LAST:event_sendbtnActionPerformed
 
     private void submitbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbtnActionPerformed
         setClient();
     }//GEN-LAST:event_submitbtnActionPerformed
+
+    private void msgtxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_msgtxtKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            sendOutMessage();
+        }
+    }//GEN-LAST:event_msgtxtKeyPressed
 
     /**
      * @param args the command line arguments
