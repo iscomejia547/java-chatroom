@@ -40,18 +40,13 @@ public class Main extends javax.swing.JFrame {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             ChatDlg ser_chat=new ChatDlg(new Main(), false);
-            
+            bkglabel.setText(String.valueOf(ss.getLocalPort()));
             ser_chat.setServerport(ss.getLocalPort());
             ser_chat.setS(s);
             ser_chat.setIsServer(true);
             ser_chat.setId(++chatcount);
             ser_chat.setVisible(true);
             newchatbtn.setEnabled(false);
-            while(true){
-                if(!ser_chat.isVisible()){
-                   newchatbtn.setEnabled(true); 
-                }
-            }
         }
     }
     
@@ -73,7 +68,7 @@ public class Main extends javax.swing.JFrame {
         newchatbtn = new javax.swing.JButton();
         newclientbtn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        bkglabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(6);
@@ -111,8 +106,8 @@ public class Main extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/bg.jpg"))); // NOI18N
-        jPanel1.add(jLabel1, java.awt.BorderLayout.CENTER);
+        bkglabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/bg.jpg"))); // NOI18N
+        jPanel1.add(bkglabel, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -175,7 +170,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel bkglabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton newchatbtn;

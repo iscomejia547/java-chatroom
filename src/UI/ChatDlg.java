@@ -92,6 +92,7 @@ public class ChatDlg extends javax.swing.JDialog {
             while(!msgin.equals("exit")){
                 try {
                     msgin=dis.readUTF();
+                    System.out.println("Mensaje: "+msgin);
                     appendMessage(msgin);
                 } catch (IOException ex) {
                     Logger.getLogger(ChatDlg.class.getName()).log(Level.SEVERE, null, ex);
